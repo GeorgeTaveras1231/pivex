@@ -3,8 +3,9 @@ defmodule Pivex.Mixfile do
 
   def project do
     [app: :pivex,
-     version: "0.0.1",
+     version: "0.1.0",
      elixir: "~> 1.0",
+     escript: [main_module: Pivex.CLI],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -14,7 +15,7 @@ defmodule Pivex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be Hex packages:
@@ -28,7 +29,9 @@ defmodule Pivex.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:hackney, github: 'benoitc/hackney'}
+      {:httpoison, "~> 0.7"},
+      {:mock, "~> 0.1.1", only: [:test]},
+      {:json, "~> 0.3.0"}
     ]
   end
 end
