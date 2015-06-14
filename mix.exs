@@ -3,7 +3,7 @@ defmodule Pivex.Mixfile do
 
   def project do
     [app: :pivex,
-     version: "0.0.1",
+     version: "0.1.0",
      elixir: "~> 1.0",
      escript: [main_module: Pivex.CLI],
      build_embedded: Mix.env == :prod,
