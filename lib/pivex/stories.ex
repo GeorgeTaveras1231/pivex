@@ -10,9 +10,10 @@ defmodule Pivex.Stories do
   """
 
   def get(token, project_id) do
-    Pivex.URL.stories_path(project_id)
-    |> @client.get([{"X-TrackerToken", token}])
-    |> handle_response
+    path = Pivex.URL.stories_path(project_id)
+    case @client.get(path, [{"X-TrackerToken", token}]) do
+     {:ok, response} -> handle_response(response)
+    end
   end
 
   defp handle_response(%{status_code: 200, body: body}) do
@@ -26,8 +27,8 @@ defmodule Pivex.Stories do
     "current_state" => status,
     "id" => id,
     "name" => name,
-    "description" => description}
-  ) do
+    "description" => description
+    }) do
 
     %Pivex.Story{
       type: type,
@@ -35,6 +36,22 @@ defmodule Pivex.Stories do
       id: id,
       name: name,
       description: description
+    }
+  end
+
+  defp to_story(%{
+    "story_type" => type,
+    "current_state" => status,
+    "id" => id,
+    "name" => name
+    }) do
+
+    %Pivex.Story{
+      type: type,
+      status: status,
+      id: id,
+      name: name,
+      description: nil
     }
   end
 end
