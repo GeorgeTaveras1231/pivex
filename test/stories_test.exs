@@ -5,11 +5,34 @@ defmodule StoriesTest do
 
   @api_url "https://www.pivotaltracker.com/services/v5"
 
-  test_with_mock ".get(token, project_id)", HTTPoison,
-    [get: fn (_url, _headers) -> "[]" end] do
+  test ".get(token, project_id)" do
     stories_url = @api_url <> "/projects/123123/stories"
+    stubbed_response = fn(_url, [{"X-TrackerToken", 'abc123'}])->
+      %HTTPoison.Response{
+        body: File.read!("test/fixtures/stories.json"),
+        status_code: 200
+      }
+    end
 
-    Pivex.Stories.get('abc123', "123123")
-    assert called(HTTPoison.get(stories_url, [{"X-TrackerToken", 'abc123'}]))
+    expected_stories = [
+      %Pivex.Story{
+        id: 560,
+        name: "Tractor beam loses power intermittently",
+        type: "bug",
+        status: "unstarted",
+        description: "It's malfunctioning."
+      },
+      %Pivex.Story{
+        id: 565,
+        name: "Repair CommLink",
+        description: "It's malfunctioning.",
+        type: "chore",
+        status: "unstarted"
+      }
+    ]
+
+    with_mock HTTPoison, [get: stubbed_response] do
+      assert Pivex.Stories.get('abc123', "123123") == expected_stories
+    end
   end
 end

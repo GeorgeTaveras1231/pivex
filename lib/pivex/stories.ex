@@ -1,5 +1,8 @@
+defmodule Pivex.Story do
+  defstruct [:name, :id, :type, :status, :description]
+end
+
 defmodule Pivex.Stories do
-  @url "https://www.pivotaltracker.com/services/v5"
   @client HTTPoison
 
   @doc """
@@ -7,18 +10,32 @@ defmodule Pivex.Stories do
   """
 
   def get(token, project_id) do
-    stories_path(project_id) |>
-      @client.get [{"X-TrackerToken", token}]
+    Pivex.URL.stories_path(project_id)
+    |> @client.get([{"X-TrackerToken", token}])
+    |> handle_response
   end
 
-  @doc """
-    Get the stories path for a project
+  defp handle_response(%{status_code: 200, body: body}) do
+    {:ok, parsed_json} = body |> JSON.decode
 
-    Examples:
-      iex> Pivex.Stories.stories_path("123")
-      "#{@url}/projects/123/stories"
-  """
-  def stories_path(project_id) do
-    "#{@url}/projects/#{project_id}/stories"
+    parsed_json |> Enum.map(&to_story/1)
+  end
+
+  defp to_story(%{
+    "story_type" => type,
+    "current_state" => status,
+    "id" => id,
+    "name" => name,
+    "description" => description}
+  ) do
+
+    %Pivex.Story{
+      type: type,
+      status: status,
+      id: id,
+      name: name,
+      description: description
+    }
   end
 end
+

@@ -30,6 +30,7 @@ defmodule Pivex.Mixfile do
     [
       {:httpoison, "~> 0.7"},
       {:mock, "~> 0.1.1", only: [:test]},
+      {:json, "~> 0.3.0"}
     ]
   end
 end
