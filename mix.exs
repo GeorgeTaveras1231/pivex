@@ -14,7 +14,7 @@ defmodule Pivex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be Hex packages:
@@ -28,7 +28,8 @@ defmodule Pivex.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:hackney, github: 'benoitc/hackney'}
+      {:httpoison, "~> 0.7"},
+      {:mock, "~> 0.1.1", only: [:test]},
     ]
   end
 end
