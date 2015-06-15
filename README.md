@@ -17,6 +17,12 @@ This creates an execurable called 'pivex'.
 
 # Usage
 
+Get help
+
+```bash
+$ ./pivex --help
+```
+
 See stories
 
 ```bash
