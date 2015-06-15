@@ -1,9 +1,11 @@
 defmodule CLITest do
+  @module Pivex.CLI
+
   use ExUnit.Case, async: true
   import ExUnit.CaptureIO
   import Mock
 
-  test ~s{.main(["stories", "--token=abc123", "--project=123123"])} do
+  test ~s{#{@module}.main(["stories", "--token=abc123", "--project=123123"])} do
     mocked_stories_get = fn
       ("abc123", "123123") ->
         [
@@ -19,7 +21,7 @@ defmodule CLITest do
 
     output = capture_io fn ->
       with_mock Pivex.Stories, [get: mocked_stories_get] do
-        Pivex.CLI.main(["stories", "--token=abc123", "--project=123123"])
+        @module.main(["stories", "--token=abc123", "--project=123123"])
       end
     end
 
