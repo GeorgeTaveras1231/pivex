@@ -22,36 +22,13 @@ defmodule Pivex.Stories do
     parsed_json |> Enum.map(&to_story/1)
   end
 
-  defp to_story(%{
-    "story_type" => type,
-    "current_state" => status,
-    "id" => id,
-    "name" => name,
-    "description" => description
-    }) do
-
+  defp to_story(map) do
     %Pivex.Story{
-      type: type,
-      status: status,
-      id: id,
-      name: name,
-      description: description
-    }
-  end
-
-  defp to_story(%{
-    "story_type" => type,
-    "current_state" => status,
-    "id" => id,
-    "name" => name
-    }) do
-
-    %Pivex.Story{
-      type: type,
-      status: status,
-      id: id,
-      name: name,
-      description: nil
+      type: map["story_type"],
+      status: map["current_state"],
+      id: map["id"],
+      name: map["name"],
+      description: map["description"]
     }
   end
 end
